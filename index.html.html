@@ -1,3 +1,9 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TLF 5.0 Decision Map — BRIDGES 5.0</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -6,13 +12,14 @@
   --text:#e2eef8;--muted:#6d90ab;--faint:#1d3348;
   --amber:#f0a500;--teal2:#2ccfbd;
 }
-.app *,.app *::before,.app *::after{box-sizing:border-box;margin:0;padding:0}
-.app{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);
-  min-height:100vh;font-size:14px;line-height:1.6;position:relative;display:flex;flex-direction:column}
-.app::before{content:'';position:fixed;inset:0;pointer-events:none;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);
+  min-height:100vh;font-size:14px;line-height:1.6}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;
   background:radial-gradient(ellipse 700px 400px at 80% 0%,rgba(240,165,0,.05) 0%,transparent 65%),
     linear-gradient(rgba(11,163,144,.018) 1px,transparent 1px) 0 0/52px 52px,
     linear-gradient(90deg,rgba(11,163,144,.018) 1px,transparent 1px) 0 0/52px 52px;}
+.app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column}
 
 header{display:flex;align-items:center;justify-content:space-between;padding:15px 36px;
   background:rgba(11,21,32,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);
@@ -32,11 +39,13 @@ main{flex:1;display:flex;flex-direction:column;align-items:center;padding:48px 2
 .page-title em{font-style:normal;color:var(--amber)}
 .page-sub{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.6}
 
+/* legend */
 .legend{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:22px}
 .leg{display:inline-flex;align-items:center;gap:6px;font-family:'Syne',sans-serif;font-weight:700;
   font-size:10px;padding:4px 11px;border-radius:20px;border:1px solid;letter-spacing:.04em}
 .leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 
+/* outcome colour classes */
 .o-DD  {--oc:106,143,170}
 .o-BTF {--oc:245,158,11}
 .o-LF  {--oc:16,185,129}
@@ -44,29 +53,37 @@ main{flex:1;display:flex;flex-direction:column;align-items:center;padding:48px 2
 .o-TLF {--oc:139,92,246}
 .o-TLFN{--oc:236,72,153}
 
+/* note */
 .map-note{font-size:12px;color:var(--muted);padding:10px 14px;border-radius:7px;
   background:rgba(255,255,255,.03);border:1px solid var(--line);line-height:1.55;margin-bottom:24px}
 
+/* ─── FLOW TREE ─── */
 .tree{font-family:'DM Sans',sans-serif}
 
+/* question node */
 .qn{background:var(--bg3);border:1px solid var(--line2);border-radius:9px;padding:12px 16px;
   display:inline-block;max-width:100%}
 .qn-label{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.09em;
   text-transform:uppercase;color:var(--muted);margin-bottom:3px}
 .qn-text{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text);line-height:1.3}
 
+/* connector line from question down */
 .connector-v{width:2px;background:var(--faint);margin:0 auto;transition:background .2s}
 .connector-v.short{height:12px}
 .connector-v.med{height:16px}
 
+/* branch row — horizontal spread */
 .branches{display:flex;gap:0;align-items:flex-start;position:relative;margin-top:0}
+/* top horizontal bar */
 .branches::before{content:'';position:absolute;top:0;height:2px;background:var(--faint);
   left:calc(50% / var(--n) );right:calc(50% / var(--n))}
 
+/* individual branch */
 .branch{flex:1;display:flex;flex-direction:column;align-items:center;padding:0 4px}
 .branch-top{width:2px;background:var(--faint);margin:0 auto}
 .branch-top.h12{height:12px}.branch-top.h16{height:16px}.branch-top.h20{height:20px}
 
+/* answer label */
 .ans{font-size:11px;color:var(--muted);padding:4px 9px;border-radius:5px;
   background:rgba(255,255,255,.03);border:1px solid var(--line);text-align:center;
   line-height:1.35;max-width:160px;margin-bottom:0}
@@ -74,18 +91,24 @@ main{flex:1;display:flex;flex-direction:column;align-items:center;padding:48px 2
 .branch-bot{width:2px;background:var(--faint);margin:0 auto}
 .branch-bot.h8{height:8px}.branch-bot.h12{height:12px}.branch-bot.h16{height:16px}
 
+/* outcome chip */
 .outcome{display:inline-flex;align-items:center;gap:7px;padding:9px 14px;
   border-radius:9px;border:1px solid;font-family:'Syne',sans-serif;font-weight:700;
   font-size:12px;cursor:pointer;transition:all .18s;text-align:left;max-width:180px;
   background:rgba(var(--oc),.08);border-color:rgba(var(--oc),.3);color:rgb(var(--oc))}
 .outcome:hover{transform:translateY(-2px);background:rgba(var(--oc),.14);
   border-color:rgba(var(--oc),.5);box-shadow:0 4px 16px rgba(var(--oc),.15)}
-.o-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:rgba(var(--oc),1)}
+.o-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;
+  background:rgba(var(--oc),1)}
 .outcome-sub{font-size:10px;opacity:.75;font-weight:400;margin-top:1px;display:block}
 
+/* nested sub-tree */
 .subtree{display:flex;flex-direction:column;align-items:center;width:100%}
+
+/* separator between levels */
 .level-sep{height:24px}
 
+/* modal */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:500;
   align-items:center;justify-content:center;padding:20px}
 .overlay.on{display:flex}
@@ -124,7 +147,8 @@ footer a{color:var(--teal2);text-decoration:none}
   header{padding:12px 16px}
 }
 </style>
-
+</head>
+<body>
 <div class="app">
 
 <header>
@@ -153,8 +177,10 @@ footer a{color:var(--teal2);text-decoration:none}
 
   <div class="map-note">Questions are only asked when the answer actually changes the result. LF = technology adoption in a simulated environment · TF = problem solving in a real operational context</div>
 
+  <!-- ═══ TREE ═══ -->
   <div class="tree">
 
+    <!-- Q1 -->
     <div style="display:flex;flex-direction:column;align-items:center">
       <div class="qn">
         <div class="qn-label">Question 1 — always asked</div>
@@ -163,7 +189,9 @@ footer a{color:var(--teal2);text-decoration:none}
       <div class="connector-v short"></div>
     </div>
 
+    <!-- Q1 four branches -->
     <div class="branches" style="--n:4">
+      <!-- B1: unaware -->
       <div class="branch">
         <div class="branch-top h12"></div>
         <div class="ans">We haven't started — no shared direction</div>
@@ -174,10 +202,12 @@ footer a{color:var(--teal2);text-decoration:none}
         </div>
       </div>
 
+      <!-- B2: resistant -->
       <div class="branch">
         <div class="branch-top h12"></div>
         <div class="ans">Aware but not moving yet</div>
         <div class="branch-bot h12"></div>
+        <!-- sub-Q2 for resistant -->
         <div class="subtree">
           <div class="qn" style="max-width:200px">
             <div class="qn-label">Q2</div>
@@ -207,10 +237,12 @@ footer a{color:var(--teal2);text-decoration:none}
         </div>
       </div>
 
+      <!-- B3: engaged -->
       <div class="branch">
         <div class="branch-top h12"></div>
         <div class="ans">Actively working on it</div>
         <div class="branch-bot h12"></div>
+        <!-- sub-Q2 for engaged -->
         <div class="subtree">
           <div class="qn" style="max-width:200px">
             <div class="qn-label">Q2</div>
@@ -218,6 +250,7 @@ footer a{color:var(--teal2);text-decoration:none}
           </div>
           <div class="connector-v short"></div>
           <div class="branches" style="--n:2;width:100%">
+            <!-- engaged + culture -->
             <div class="branch">
               <div class="branch-top h12"></div>
               <div class="ans">Culture / ways of working</div>
@@ -227,6 +260,7 @@ footer a{color:var(--teal2);text-decoration:none}
                 <div><div>Behavioural TF</div><span class="outcome-sub">2 questions</span></div>
               </div>
             </div>
+            <!-- engaged + operational → Q3a -->
             <div class="branch">
               <div class="branch-top h12"></div>
               <div class="ans">Concrete operational challenge</div>
@@ -263,10 +297,12 @@ footer a{color:var(--teal2);text-decoration:none}
         </div>
       </div>
 
+      <!-- B4: strategic -->
       <div class="branch">
         <div class="branch-top h12"></div>
         <div class="ans">Strategically embedded — track record</div>
         <div class="branch-bot h12"></div>
+        <!-- sub-Q3b for strategic -->
         <div class="subtree">
           <div class="qn" style="max-width:200px">
             <div class="qn-label">Q3 (Q2 skipped)</div>
@@ -295,12 +331,13 @@ footer a{color:var(--teal2);text-decoration:none}
           </div>
         </div>
       </div>
-    </div>
+    </div><!-- /Q1 branches -->
 
-  </div>
+  </div><!-- /tree -->
 
 </div></main>
 
+<!-- MODAL -->
 <div class="overlay" id="overlay" onclick="close_modal(event)">
   <div class="modal" id="modal">
     <button class="modal-close" onclick="close_modal_direct()">✕</button>
@@ -430,3 +467,5 @@ function close_modal_direct(){
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape') close_modal_direct();});
 </script>
+</body>
+</html>
