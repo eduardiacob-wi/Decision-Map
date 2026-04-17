@@ -1,0 +1,432 @@
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b1520;--bg2:#101e2d;--bg3:#162436;
+  --line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.14);
+  --text:#e2eef8;--muted:#6d90ab;--faint:#1d3348;
+  --amber:#f0a500;--teal2:#2ccfbd;
+}
+.app *,.app *::before,.app *::after{box-sizing:border-box;margin:0;padding:0}
+.app{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);
+  min-height:100vh;font-size:14px;line-height:1.6;position:relative;display:flex;flex-direction:column}
+.app::before{content:'';position:fixed;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 700px 400px at 80% 0%,rgba(240,165,0,.05) 0%,transparent 65%),
+    linear-gradient(rgba(11,163,144,.018) 1px,transparent 1px) 0 0/52px 52px,
+    linear-gradient(90deg,rgba(11,163,144,.018) 1px,transparent 1px) 0 0/52px 52px;}
+
+header{display:flex;align-items:center;justify-content:space-between;padding:15px 36px;
+  background:rgba(11,21,32,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);
+  position:sticky;top:0;z-index:200}
+.logo{display:flex;align-items:center;gap:10px}
+.hex{width:34px;height:34px;background:var(--amber);flex-shrink:0;
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  display:grid;place-items:center;font-family:'Syne',sans-serif;font-weight:800;font-size:10px;color:var(--bg)}
+.logo-name{font-family:'Syne',sans-serif;font-weight:700;font-size:13px}
+.logo-sub{font-size:10px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase}
+
+main{flex:1;display:flex;flex-direction:column;align-items:center;padding:48px 20px 80px}
+.shell{width:100%;max-width:820px}
+
+.page-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(20px,3vw,28px);
+  margin-bottom:6px;line-height:1.1}
+.page-title em{font-style:normal;color:var(--amber)}
+.page-sub{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.6}
+
+.legend{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:22px}
+.leg{display:inline-flex;align-items:center;gap:6px;font-family:'Syne',sans-serif;font-weight:700;
+  font-size:10px;padding:4px 11px;border-radius:20px;border:1px solid;letter-spacing:.04em}
+.leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+.o-DD  {--oc:106,143,170}
+.o-BTF {--oc:245,158,11}
+.o-LF  {--oc:16,185,129}
+.o-TF  {--oc:59,130,246}
+.o-TLF {--oc:139,92,246}
+.o-TLFN{--oc:236,72,153}
+
+.map-note{font-size:12px;color:var(--muted);padding:10px 14px;border-radius:7px;
+  background:rgba(255,255,255,.03);border:1px solid var(--line);line-height:1.55;margin-bottom:24px}
+
+.tree{font-family:'DM Sans',sans-serif}
+
+.qn{background:var(--bg3);border:1px solid var(--line2);border-radius:9px;padding:12px 16px;
+  display:inline-block;max-width:100%}
+.qn-label{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.qn-text{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text);line-height:1.3}
+
+.connector-v{width:2px;background:var(--faint);margin:0 auto;transition:background .2s}
+.connector-v.short{height:12px}
+.connector-v.med{height:16px}
+
+.branches{display:flex;gap:0;align-items:flex-start;position:relative;margin-top:0}
+.branches::before{content:'';position:absolute;top:0;height:2px;background:var(--faint);
+  left:calc(50% / var(--n) );right:calc(50% / var(--n))}
+
+.branch{flex:1;display:flex;flex-direction:column;align-items:center;padding:0 4px}
+.branch-top{width:2px;background:var(--faint);margin:0 auto}
+.branch-top.h12{height:12px}.branch-top.h16{height:16px}.branch-top.h20{height:20px}
+
+.ans{font-size:11px;color:var(--muted);padding:4px 9px;border-radius:5px;
+  background:rgba(255,255,255,.03);border:1px solid var(--line);text-align:center;
+  line-height:1.35;max-width:160px;margin-bottom:0}
+
+.branch-bot{width:2px;background:var(--faint);margin:0 auto}
+.branch-bot.h8{height:8px}.branch-bot.h12{height:12px}.branch-bot.h16{height:16px}
+
+.outcome{display:inline-flex;align-items:center;gap:7px;padding:9px 14px;
+  border-radius:9px;border:1px solid;font-family:'Syne',sans-serif;font-weight:700;
+  font-size:12px;cursor:pointer;transition:all .18s;text-align:left;max-width:180px;
+  background:rgba(var(--oc),.08);border-color:rgba(var(--oc),.3);color:rgb(var(--oc))}
+.outcome:hover{transform:translateY(-2px);background:rgba(var(--oc),.14);
+  border-color:rgba(var(--oc),.5);box-shadow:0 4px 16px rgba(var(--oc),.15)}
+.o-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:rgba(var(--oc),1)}
+.outcome-sub{font-size:10px;opacity:.75;font-weight:400;margin-top:1px;display:block}
+
+.subtree{display:flex;flex-direction:column;align-items:center;width:100%}
+.level-sep{height:24px}
+
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:500;
+  align-items:center;justify-content:center;padding:20px}
+.overlay.on{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--line2);border-radius:12px;
+  padding:28px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
+.modal-close{position:absolute;top:14px;right:14px;background:transparent;border:none;
+  color:var(--muted);cursor:pointer;font-size:18px;line-height:1;padding:4px 8px;
+  border-radius:5px;transition:color .15s}
+.modal-close:hover{color:var(--text)}
+.modal-name{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;margin-bottom:10px}
+.modal-head{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:8px;line-height:1.3}
+.modal-body{font-size:13px;line-height:1.65;color:#b0cde0;margin-bottom:16px}
+.modal-sh{font-family:'Syne',sans-serif;font-weight:700;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.modal-steps{display:flex;flex-direction:column;gap:6px}
+.modal-step{display:flex;gap:10px;padding:9px 12px;border-radius:6px;
+  border:1px solid var(--line);font-size:12px;color:#a8c8dc;line-height:1.5}
+.modal-step strong{color:var(--text);font-weight:500}
+.msn{width:18px;height:18px;border-radius:50%;flex-shrink:0;background:var(--amber);
+  color:var(--bg);font-family:'Syne',sans-serif;font-weight:800;font-size:9px;
+  display:grid;place-items:center;margin-top:1px}
+.modal-pathway{margin-top:12px;padding:10px 13px;border-radius:7px;font-size:12px;
+  color:#93c5fd;line-height:1.5;background:rgba(59,126,240,.07);border:1px solid rgba(59,126,240,.2);
+  display:flex;gap:8px}
+
+footer{text-align:center;padding:16px;border-top:1px solid var(--line);
+  font-size:10px;color:var(--muted);position:relative;z-index:1}
+footer a{color:var(--teal2);text-decoration:none}
+
+@media(max-width:600px){
+  .branches{flex-direction:column;align-items:center}
+  .branches::before{display:none}
+  .branch{width:100%;max-width:280px;padding:4px 0}
+  .branch-top,.branch-bot{height:8px!important}
+  .outcome{max-width:100%}
+  header{padding:12px 16px}
+}
+</style>
+
+<div class="app">
+
+<header>
+  <div class="logo">
+    <div class="hex">B5</div>
+    <div>
+      <div class="logo-name">TLF 5.0 Decision Map</div>
+      <div class="logo-sub">BRIDGES 5.0 · D6.3</div>
+    </div>
+  </div>
+</header>
+
+<main><div class="shell">
+
+  <h1 class="page-title">From questions to <em>intervention</em></h1>
+  <p class="page-sub">Each path through the three questions maps to one of six intervention types. Only the questions that change the outcome are asked. Click any outcome to read its full guidance.</p>
+
+  <div class="legend">
+    <div class="leg o-DD"  style="border-color:rgba(106,143,170,.35)"><div class="leg-dot" style="background:#8fb8d4"></div>Dialogue &amp; Diagnostics</div>
+    <div class="leg o-BTF" style="border-color:rgba(245,158,11,.35)"> <div class="leg-dot" style="background:#fbbf24"></div>Behavioural TF</div>
+    <div class="leg o-LF"  style="border-color:rgba(16,185,129,.35)"> <div class="leg-dot" style="background:#34d399"></div>Learning Factory</div>
+    <div class="leg o-TF"  style="border-color:rgba(59,130,246,.35)"> <div class="leg-dot" style="background:#60a5fa"></div>Teaching Factory</div>
+    <div class="leg o-TLF" style="border-color:rgba(139,92,246,.35)"> <div class="leg-dot" style="background:#a78bfa"></div>TLF</div>
+    <div class="leg o-TLFN"style="border-color:rgba(236,72,153,.35)"> <div class="leg-dot" style="background:#f472b6"></div>TLF Network</div>
+  </div>
+
+  <div class="map-note">Questions are only asked when the answer actually changes the result. LF = technology adoption in a simulated environment · TF = problem solving in a real operational context</div>
+
+  <div class="tree">
+
+    <div style="display:flex;flex-direction:column;align-items:center">
+      <div class="qn">
+        <div class="qn-label">Question 1 — always asked</div>
+        <div class="qn-text">Which best describes your organisation right now?</div>
+      </div>
+      <div class="connector-v short"></div>
+    </div>
+
+    <div class="branches" style="--n:4">
+      <div class="branch">
+        <div class="branch-top h12"></div>
+        <div class="ans">We haven't started — no shared direction</div>
+        <div class="branch-bot h12"></div>
+        <div class="outcome o-DD" onclick="open_modal('DD')">
+          <div class="o-dot"></div>
+          <div><div>Dialogue &amp; Diagnostics</div><span class="outcome-sub">1 question</span></div>
+        </div>
+      </div>
+
+      <div class="branch">
+        <div class="branch-top h12"></div>
+        <div class="ans">Aware but not moving yet</div>
+        <div class="branch-bot h12"></div>
+        <div class="subtree">
+          <div class="qn" style="max-width:200px">
+            <div class="qn-label">Q2</div>
+            <div class="qn-text" style="font-size:12px">What is the main thing holding you back?</div>
+          </div>
+          <div class="connector-v short"></div>
+          <div class="branches" style="--n:2;width:100%">
+            <div class="branch">
+              <div class="branch-top h12"></div>
+              <div class="ans">Concrete operational challenge</div>
+              <div class="branch-bot h12"></div>
+              <div class="outcome o-DD" onclick="open_modal('DD')">
+                <div class="o-dot"></div>
+                <div><div>Dialogue &amp; Diagnostics</div><span class="outcome-sub">2 questions</span></div>
+              </div>
+            </div>
+            <div class="branch">
+              <div class="branch-top h12"></div>
+              <div class="ans">Culture / ways of working</div>
+              <div class="branch-bot h12"></div>
+              <div class="outcome o-BTF" onclick="open_modal('BTF')">
+                <div class="o-dot"></div>
+                <div><div>Behavioural TF</div><span class="outcome-sub">2 questions</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="branch">
+        <div class="branch-top h12"></div>
+        <div class="ans">Actively working on it</div>
+        <div class="branch-bot h12"></div>
+        <div class="subtree">
+          <div class="qn" style="max-width:200px">
+            <div class="qn-label">Q2</div>
+            <div class="qn-text" style="font-size:12px">Main challenge?</div>
+          </div>
+          <div class="connector-v short"></div>
+          <div class="branches" style="--n:2;width:100%">
+            <div class="branch">
+              <div class="branch-top h12"></div>
+              <div class="ans">Culture / ways of working</div>
+              <div class="branch-bot h12"></div>
+              <div class="outcome o-BTF" onclick="open_modal('BTF')">
+                <div class="o-dot"></div>
+                <div><div>Behavioural TF</div><span class="outcome-sub">2 questions</span></div>
+              </div>
+            </div>
+            <div class="branch">
+              <div class="branch-top h12"></div>
+              <div class="ans">Concrete operational challenge</div>
+              <div class="branch-bot h12"></div>
+              <div class="subtree">
+                <div class="qn" style="max-width:200px">
+                  <div class="qn-label">Q3</div>
+                  <div class="qn-text" style="font-size:12px">What does training need to centre on?</div>
+                </div>
+                <div class="connector-v short"></div>
+                <div class="branches" style="--n:2;width:100%">
+                  <div class="branch">
+                    <div class="branch-top h12"></div>
+                    <div class="ans">A specific technology to adopt</div>
+                    <div class="branch-bot h12"></div>
+                    <div class="outcome o-LF" onclick="open_modal('LF')">
+                      <div class="o-dot"></div>
+                      <div><div>Learning Factory</div><span class="outcome-sub">3 questions</span></div>
+                    </div>
+                  </div>
+                  <div class="branch">
+                    <div class="branch-top h12"></div>
+                    <div class="ans">A real problem to solve together</div>
+                    <div class="branch-bot h12"></div>
+                    <div class="outcome o-TF" onclick="open_modal('TF')">
+                      <div class="o-dot"></div>
+                      <div><div>Teaching Factory</div><span class="outcome-sub">3 questions</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="branch">
+        <div class="branch-top h12"></div>
+        <div class="ans">Strategically embedded — track record</div>
+        <div class="branch-bot h12"></div>
+        <div class="subtree">
+          <div class="qn" style="max-width:200px">
+            <div class="qn-label">Q3 (Q2 skipped)</div>
+            <div class="qn-text" style="font-size:12px">Who needs to be involved?</div>
+          </div>
+          <div class="connector-v short"></div>
+          <div class="branches" style="--n:2;width:100%">
+            <div class="branch">
+              <div class="branch-top h12"></div>
+              <div class="ans">Within the organisation</div>
+              <div class="branch-bot h12"></div>
+              <div class="outcome o-TLF" onclick="open_modal('TLF')">
+                <div class="o-dot"></div>
+                <div><div>TLF</div><span class="outcome-sub">2 questions</span></div>
+              </div>
+            </div>
+            <div class="branch">
+              <div class="branch-top h12"></div>
+              <div class="ans">Beyond the organisation — network</div>
+              <div class="branch-bot h12"></div>
+              <div class="outcome o-TLFN" onclick="open_modal('TLFN')">
+                <div class="o-dot"></div>
+                <div><div>TLF Network</div><span class="outcome-sub">2 questions</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div></main>
+
+<div class="overlay" id="overlay" onclick="close_modal(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="close_modal_direct()">✕</button>
+    <div class="modal-name" id="m-name"></div>
+    <div class="modal-head" id="m-head"></div>
+    <div class="modal-body" id="m-body"></div>
+    <div class="modal-sh">Where to start</div>
+    <div class="modal-steps" id="m-steps"></div>
+    <div class="modal-pathway" id="m-pathway" style="display:none">
+      <span style="font-size:15px;flex-shrink:0">→</span><span id="m-ptext"></span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  BRIDGES 5.0 · Horizon Europe · Grant Agreement 101069651 ·
+  <a href="https://bridges5-0.eu" target="_blank">bridges5-0.eu</a> · D6.3 Handbook
+</footer>
+</div>
+
+<script>
+const REC={
+  DD:{
+    color:'106,143,170',
+    name:'Dialogue & Diagnostics',
+    head:'Before training, you need conversation and honest diagnosis.',
+    body:'The most valuable investment right now is not designing a programme — it is creating the conditions for one. Surface what is actually blocking progress, build a shared vocabulary, and identify the real internal challenges that could anchor future training.',
+    steps:[
+      '<strong>Convene a leadership diagnostic session</strong> — an honest conversation about where real barriers are, not a scoring exercise.',
+      '<strong>Identify 2–3 internal champions</strong> who are already curious or quietly experimenting.',
+      '<strong>Run a joint worker-manager session</strong> on what I5.0 means in practice for their daily reality.',
+      '<strong>Document a specific internal problem</strong> everyone agrees needs solving — this becomes the entry point for the first structured intervention.'
+    ],
+    pathway:'Once shared understanding exists and a real internal problem is identified, you are ready to design a first structured intervention — LF if it centres on technology adoption, TF if it centres on operational problem solving.'
+  },
+  BTF:{
+    color:'245,158,11',
+    name:'Behavioural Teaching Factory',
+    head:'The gap is cultural — address mindset before skills.',
+    body:'Standard skills training will not move the needle. The Mondragon pilots showed that the core challenge is at the managerial level — managers\' understanding and action determine whether worker empowerment becomes real. Design for reflection, not instruction.',
+    steps:[
+      '<strong>Identify which scenario applies:</strong> is the driver for change performance only, or performance and worker well-being together?',
+      '<strong>Work on the "mirror effect" first.</strong> Collective behaviour reflects management behaviour. Change starts with leadership reviewing its own framework.',
+      '<strong>Design for reflection, not instruction.</strong> Use Teaching Factory methods — give managers a real organisational problem to solve, not a course to attend.',
+      '<strong>Plan a 3-phase arc:</strong> awareness → application → integration. Moving to application before awareness is built produces compliance, not real change.'
+    ],
+    pathway:'As cultural conditions improve, the next step is skill-specific interventions anchored to the problems dialogue surfaces — LF or TF depending on what those problems are.'
+  },
+  LF:{
+    color:'16,185,129',
+    name:'Learning Factory',
+    head:'Build technology skills in a simulated environment anchored to your actual process.',
+    body:'A Learning Factory is a controlled environment simulating your real industrial setting using actual tools, machinery, and workflows. The goal is hands-on acquisition of specific technical competencies to operate, maintain, or collaborate with a particular technology.',
+    steps:[
+      '<strong>Define the specific technology</strong> — the machine, digital system, cobot, sensor, or process tool workers need to learn to use effectively.',
+      '<strong>Set up a simulation environment</strong> that mirrors real working conditions. Learners work with actual or realistic replicas of the tools.',
+      '<strong>Run pre-assessment before training begins.</strong> The baseline is not optional — it is what proves the intervention worked.',
+      '<strong>Apply peer-to-peer methodology</strong> — instructor / learner / observer roles rotating within small groups. The key structural innovation of the Kitron pilot.',
+      '<strong>Check transfer at 30 and 90 days.</strong> If technology is not being applied in the workplace, understand why before investing in the next cohort.'
+    ],
+    pathway:'As confidence with the technology grows, the organisation is ready for a Teaching Factory anchored to the operational problems that technology is now surfacing.'
+  },
+  TF:{
+    color:'59,130,246',
+    name:'Teaching Factory',
+    head:'Build problem-solving capacity by training inside a real operational challenge.',
+    body:'A Teaching Factory brings together industry practitioners and learners around a live, real-world problem in the actual workplace. Workers and managers learn through the act of tackling something real. The Mondragon and Infineon pilots showed that this produces large, sustained upskilling effects precisely because the stakes are real.',
+    steps:[
+      '<strong>Select and document the problem</strong> — real, visible, and agreed on by both workers and managers. This single step reduces resistance more than any other.',
+      '<strong>Define the intervention structure</strong> using the Design Template: pillars, skills, tasks, KPIs, and how all three I5.0 pillars integrate.',
+      '<strong>Run pre-assessment before training begins.</strong> The baseline cannot be reconstructed after the fact.',
+      '<strong>Use TF methodology explicitly:</strong> participants face the problem, generate solutions, test them, reflect. Co-creation is the mechanism — not lecture and recall.',
+      '<strong>Develop internal facilitators.</strong> Facilitation quality is the single strongest predictor of sustained upskilling.'
+    ],
+    pathway:'After a successful first cycle, apply the same approach further. As the programme matures, the organisation is ready to ask: how does this continue beyond a single project? That is when TLF becomes the appropriate frame.'
+  },
+  TLF:{
+    color:'139,92,246',
+    name:'Teaching & Learning Factory',
+    head:'Integrate training into a self-sustaining organisational system.',
+    body:'Training should no longer be a project — it should be a continuous, embedded capability. The challenge shifts from designing individual interventions to making the whole system self-sustaining: internal facilitation capacity, feedback loops, and documented methodology.',
+    steps:[
+      '<strong>Map all stakeholder value flows</strong> — who contributes, who benefits, what happens if any contributor exits.',
+      '<strong>Certify your internal facilitators</strong> and document the design so others can run it without rebuilding.',
+      '<strong>Use evaluation data to improve the next cohort,</strong> not just to report on the last one.',
+      '<strong>Begin the conversation about formal credentials.</strong> Workers are developing real competences that deserve EQF-aligned recognition.'
+    ],
+    pathway:'When internal sustainability is established, connecting to a wider network of companies and training providers is the natural next step — towards a TLF Network.'
+  },
+  TLFN:{
+    color:'236,72,153',
+    name:'TLF Network',
+    head:'Build shared training infrastructure across a regional ecosystem.',
+    body:'The question is no longer how to train internally — it is how to build shared infrastructure making high-quality, formally recognised training available across a network, sustainable beyond any single project, and connected to European credentialing frameworks.',
+    steps:[
+      '<strong>Map cross-organisational value flows</strong> — who pays, who delivers, who governs, who exits first if funding ends.',
+      '<strong>Finalise the microcredential governance structure:</strong> who issues, how records are stored (eIDAS 2.0), how credentials stack toward full qualifications.',
+      '<strong>Engage through national channels</strong> — NCP, CEDEFOP — to register in the European Qualifications Gateway (EQF levels 3–6).',
+      '<strong>Develop a replication package</strong> so new network partners can implement without starting from zero.'
+    ],
+    pathway:null
+  }
+};
+
+function open_modal(type){
+  const r=REC[type];
+  const o=document.getElementById('overlay');
+  document.getElementById('m-name').textContent=r.name;
+  document.getElementById('m-name').style.color=`rgb(${r.color})`;
+  document.getElementById('m-head').textContent=r.head;
+  document.getElementById('m-body').textContent=r.body;
+  document.getElementById('m-steps').innerHTML=r.steps
+    .map((s,i)=>`<div class="modal-step"><div class="msn">${i+1}</div><div>${s}</div></div>`).join('');
+  const pw=document.getElementById('m-pathway');
+  if(r.pathway){document.getElementById('m-ptext').textContent=r.pathway;pw.style.display='flex';}
+  else pw.style.display='none';
+  o.classList.add('on');
+  document.body.style.overflow='hidden';
+}
+
+function close_modal(e){
+  if(e.target===document.getElementById('overlay')) close_modal_direct();
+}
+function close_modal_direct(){
+  document.getElementById('overlay').classList.remove('on');
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape') close_modal_direct();});
+</script>
